@@ -1,0 +1,22 @@
+# version: 0.1.0
+# refurb_watcher dashboard · systemd unit
+# À copier dans /etc/systemd/system/refurb_watcher.service
+# Activer : sudo systemctl daemon-reload && sudo systemctl enable --now refurb_watcher
+
+[Unit]
+Description=refurb_watcher dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=refurb
+WorkingDirectory=/opt/refurb_watcher
+ExecStart=/opt/refurb_watcher/venv/bin/python web.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/opt/refurb_watcher/logs/web.log
+StandardError=append:/opt/refurb_watcher/logs/web.log
+
+[Install]
+WantedBy=multi-user.target

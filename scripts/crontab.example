@@ -1,0 +1,13 @@
+# version: 0.1.0
+# refurb_watcher · cron
+# À placer via `crontab -e`
+# Chemin à adapter selon où tu as cloné
+
+# Heures actives (FR 08-22h) : poll toutes les 10 min
+*/10 8-22 * * *  cd /opt/refurb_watcher && ./venv/bin/python watcher.py >> logs/watcher.log 2>&1
+
+# Heures creuses (nuit) : poll toutes les 30 min
+*/30 0-7,23 * * * cd /opt/refurb_watcher && ./venv/bin/python watcher.py >> logs/watcher.log 2>&1
+
+# Rotation logs (1x/jour)
+0 4 * * *  cd /opt/refurb_watcher && mv logs/watcher.log logs/watcher.log.$(date +\%Y\%m\%d) 2>/dev/null; find logs -name 'watcher.log.*' -mtime +14 -delete

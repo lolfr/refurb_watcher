@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>refurb-watcher · historique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>refurb-watcher</h1>
+    <nav>
+        <a href="/">Actuels</a>
+        <a href="/history" class="active">Historique</a>
+        <a href="/health">Santé</a>
+    </nav>
+</header>
+
+<main>
+<section>
+    <h2>Historique des événements</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Quand</th>
+                <th>Type</th>
+                <th>Produit</th>
+                <th>Part</th>
+                <th>Prix</th>
+                <th>Notif</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in events %}
+            <tr class="event-{{ e.event_type }}">
+                <td>{{ e.seen_at|dt }}</td>
+                <td>{{ e.event_type }}</td>
+                <td>{{ e.title or '—' }}</td>
+                <td class="muted">{{ e.part_number }}</td>
+                <td>{{ e.price_cents|euro }}</td>
+                <td>{% if e.notified %}✓{% else %}—{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+</main>
+
+<footer>
+    <span class="muted">Généré {{ now|dt }} · refurb-watcher v0.1.0</span>
+</footer>
+</body>
+</html>

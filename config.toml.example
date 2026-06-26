@@ -1,0 +1,73 @@
+# refurb_watcher — configuration
+# Copy to config.toml and edit. config.toml is gitignored (it holds your secrets).
+
+[apple]
+# Apple Refurbished pages to watch. Any Apple locale works — these examples are
+# the France store; swap in /us/, /uk/, /de/ … and the categories you care about.
+urls = [
+    "https://www.apple.com/fr/shop/refurbished/mac/mac-studio",
+    "https://www.apple.com/fr/shop/refurbished/mac/mac-mini",
+    "https://www.apple.com/fr/shop/refurbished/mac/macbook-pro",
+]
+user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15"
+timeout_seconds = 20
+
+[database]
+# backend = "sqlite" (default, zero-setup) or "mariadb".
+backend = "sqlite"
+
+# -- sqlite backend --
+# Single file, created automatically on first run. Nothing to install.
+path = "refurb.db"
+
+# -- mariadb backend (optional) --
+# Set backend = "mariadb", run `pip install pymysql`, apply schema.sql once,
+# then fill in the connection below.
+# host = "localhost"
+# port = 3306
+# user = "refurb"
+# password = "CHANGE_ME"
+# database = "refurb_watcher"
+
+[ntfy]
+# Optional push notifications via ntfy (https://ntfy.sh or self-hosted).
+# Leave url empty to disable notifications entirely — the scraper still records
+# everything to the database and the dashboard still works.
+url = ""                       # e.g. "https://ntfy.sh/my-refurb-topic"
+priority = "high"              # default | low | high | urgent
+token = ""                     # bearer token, only if your ntfy topic needs auth
+
+[filters]
+# NOTIFICATION criteria. Everything is always recorded in the DB; only products
+# matching these filters trigger a push. Empty keywords => notify every new item.
+keywords = [
+    "Mac Studio",
+    "MacBook Pro",
+    "Mac mini",
+]
+
+# Optional per-category rules. A new product in that category must satisfy the
+# rule to be notified (it is still recorded either way).
+[[filters.must_match]]
+category = "Mac Studio"
+min_ram_gb = 96
+
+[[filters.must_match]]
+category = "MacBook Pro"
+min_ram_gb = 36
+
+[[filters.must_match]]
+category = "Mac mini"
+min_ram_gb = 32
+# max_price_eur = 2000        # optional price ceiling, also supported
+
+[watcher]
+# Minutes without a successful poll before /health flags the scraper as stale.
+stale_alert_minutes = 60
+
+[dashboard]
+# Flask dev server. Bind to 127.0.0.1 and put a reverse proxy in front for
+# anything public. Use a WSGI server (gunicorn/uwsgi) for production.
+host = "127.0.0.1"
+port = 5060
+cache_seconds = 30

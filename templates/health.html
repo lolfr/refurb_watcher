@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>refurb-watcher · santé</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>refurb-watcher</h1>
+    <nav>
+        <a href="/">Actuels</a>
+        <a href="/history">Historique</a>
+        <a href="/health" class="active">Santé</a>
+    </nav>
+</header>
+
+<main>
+<section>
+    <h2>Derniers polls</h2>
+    <p>Dernier poll réussi : <strong>{{ health.last_ok|dt }}</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Quand</th>
+                <th>URL</th>
+                <th>Statut HTTP</th>
+                <th>Produits</th>
+                <th>Durée</th>
+                <th>Erreur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in health.recent %}
+            <tr>
+                <td>{{ p.polled_at|dt }}</td>
+                <td class="muted">{{ p.url|replace('https://www.apple.com/fr/shop/refurbished/mac/', '') }}</td>
+                <td>{% if p.http_status == 200 %}<span class="ok">200</span>{% else %}<span class="err">{{ p.http_status or '—' }}</span>{% endif %}</td>
+                <td>{{ p.products_found if p.products_found is not none else '—' }}</td>
+                <td>{{ p.duration_ms or '—' }} ms</td>
+                <td class="err">{{ p.error or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+</main>
+
+<footer>
+    <span class="muted">Généré {{ now|dt }} · refurb-watcher v0.1.0</span>
+</footer>
+</body>
+</html>
