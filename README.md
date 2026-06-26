@@ -6,6 +6,8 @@ available plus the full appearance / price-change history.
 
 **Zero-setup:** runs on SQLite out of the box — no database to install.
 
+![refurb_watcher dashboard — what's available now, grouped by category, plus the recent appearance/price events](docs/dashboard.png)
+
 ## Features
 
 - **Scrapes** any Apple Refurbished page(s), any locale — Mac Studio, Mac mini,

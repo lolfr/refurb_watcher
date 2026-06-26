@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 # version: 0.1.0
-refurb-watcher : scraper + diff + notification
+refurb_watcher : scraper + diff + notification
 
 Lancé par cron toutes les 10-30 min.
 Cycle :

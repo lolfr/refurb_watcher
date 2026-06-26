@@ -1,6 +1,6 @@
 """
 # version: 0.1.0
-refurb-watcher : extraction des produits depuis le HTML Apple Refurb FR
+refurb_watcher : extraction des produits depuis le HTML Apple Refurb FR
 
 Apple Refurb FR rend le HTML côté serveur. Les produits sont dans un bloc
 JSON embarqué (visible via View Source). Stratégie en 3 couches :
